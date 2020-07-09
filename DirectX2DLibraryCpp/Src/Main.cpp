@@ -8,6 +8,8 @@
 Vec2 g_Position = Vec2(0.0f, 0.0f);
 Vec2 g_Scale = Vec2(1.0f, 1.0f);
 float g_Angle = 0.0f;
+DWORD g_StratTime = 0;
+DWORD g_ElapsedTime = 0;
 
 // ゲーム処理
 void GameProcessing();
@@ -20,6 +22,7 @@ int WINAPI WinMain(
 	_In_ LPSTR     lpCmpLine,
 	_In_ INT       nCmdShow)
 {
+	g_StratTime = timeGetTime();
 	// エンジンの初期化
 	// ゲームループ開始前に1度だけ実行する
 	if (Engine::Initialize(640, 480, "Sample") == false)
@@ -46,6 +49,7 @@ int WINAPI WinMain(
 		}
 		else
 		{
+			g_ElapsedTime = timeGetTime() - g_StratTime;
 			// ゲーム処理
 			GameProcessing();
 
@@ -95,11 +99,20 @@ void DrawProcessing()
 	// 描画開始
 	// 描画処理を実行する場合、必ず最初実行する
 	Engine::StartDrawing(0);
+	char countDownStrings{2};
+	int countDownTime = 0;
+	if (g_ElapsedTime < 3000)
+	{
+
+		sprintf_s(countDownStrings, 2, "%d", countDownTime);
+		Engine::DrawFont(300.0f, 400.0f, "countDownStrings", FontSize::Large, FontColor::White);
+	}
+	
 
 	// フォント描画
 	Engine::DrawFont(0.0f, 0.0f, "FontSize:Small", FontSize::Small, FontColor::White);
-	Engine::DrawFont(0.0f, 30.0f, "FontSize:Regular", FontSize::Regular, FontColor::White);
-	Engine::DrawFont(0.0f, 60.0f, "FontSize:Large", FontSize::Large, FontColor::White);
+	
+
 
 	// 描画終了
 	// 描画処理を終了する場合、必ず最後に実行する
